@@ -42,13 +42,11 @@ export const checkAvailabilityOfCar = async(req,res) =>{
         res.json({ success: true, availableCars});
 
     } catch(error){
-        console.log(error.message);
         res.json({ success: false, message: error.message })
     }
 }
 
 export const createBooking = async(req,res) =>{
-    // console.log(req);    
     try{
       const {_id } = req.user;
       const {car, pickupDate,returnDate } = req.body;
@@ -83,12 +81,10 @@ export const createBooking = async(req,res) =>{
         };
 
         await transporter.sendMail(mailOptions);
-        console.log("Booking request email sent to owner :", booking.owner.email);
         
         res.json({ success: true, message: "Booking Request Created" });
 
     } catch(error){
-        console.log(error.message);
         res.json({ success: false, message: error.message })
     }
 }
@@ -101,7 +97,6 @@ export const getUserBookings = async(req,res) =>{
         res.json({success: true , bookings});
 
     } catch(error){
-        console.log(error.message);
         res.json({ success: false, message: error.message })
     }
 }
@@ -116,7 +111,6 @@ export const getOwnerBookings = async(req,res) =>{
         res.json({success: true, bookings})
 
     } catch(error){
-        console.log(error.message);
         res.json({ success: false, message: error.message })
     }
 }
@@ -125,16 +119,15 @@ export const changeBookingStatus = async(req,res) =>{
     try{
         const {_id} = req.user;
         const {bookingId , status} = req.body
-        const booking = await Booking.findById(bookingId).populate("car").populate("user").populate("owner");;
-        console.log("here: ", booking);
-        
+        const booking = await Booking.findById(bookingId).populate("car").populate("user").populate("owner");
+
+        if(!booking){
+            return res.status(404).json({success: false, message: "Booking not found"})
+        }
 
         if(booking.owner._id.toString() !== _id.toString()){
-            return res.json({success: false, message: "Unauthorized"})
+            return res.status(403).json({success: false, message: "Unauthorized"})
         }
-        if(!booking){
-            return res.json({success: false, message: "Booking not found"})
-        }        
         booking.status = status;
         await booking.save();
         
@@ -154,7 +147,6 @@ export const changeBookingStatus = async(req,res) =>{
 
        
         await transporter.sendMail(mailOptions);
-        console.log("Booking status email sent to user :", booking.user.email);
         
 
         res.json({
@@ -163,7 +155,6 @@ export const changeBookingStatus = async(req,res) =>{
         })
 
     } catch(error){
-        console.log(error.message);
         res.json({ success: false, message: error.message })
     }
 }
@@ -176,12 +167,13 @@ export const cancelBooking = async(req,res) =>{
 
         const booking = await Booking.findById(bookingId).populate("car").populate("user").populate("owner");
 
-        if(booking.user._id.toString() !== _id.toString()){
-            return res.json({success: false, message: "Unauthorized"})
-        }
         if(!booking){
-            return res.json({success: false, message: "Booking not found"})
-        }        
+            return res.status(404).json({success: false, message: "Booking not found"})
+        }
+
+        if(booking.user._id.toString() !== _id.toString()){
+            return res.status(403).json({success: false, message: "Unauthorized"})
+        }
         booking.status = "cancelled";
         await booking.save();
         
@@ -191,7 +183,6 @@ export const cancelBooking = async(req,res) =>{
         };
 
         await transporter.sendMail(mailOptions);
-        console.log("Booking cancellation email sent to owner :", booking.owner.email);
         
         res.json({
             success: true, 
@@ -199,7 +190,6 @@ export const cancelBooking = async(req,res) =>{
         })
 
     } catch(error){
-        console.log(error.message);
         res.json({ success: false, message: error.message })
     }
 };

@@ -5,7 +5,7 @@ import {Link, useNavigate } from 'react-router-dom'
 
 const Footer = () => {
   return (
-    // const navigate = useNavigate();
+    
     <div  className='px-6 py-4 md:px-16 lg:px-24 xl:px-32 mt-60 text-sm text-white bg-black/10 backdrop-blur-md rounded-md '>
             <div className=' flex flex-wrap justify-between items-start gap-8 pb-6 border-borderColor border-b'>
                 <div>
@@ -27,7 +27,7 @@ const Footer = () => {
                 </div>
 
                 <div>
-                    <h2 className='text-base font-medium text-black uppercase'>Quick Links</h2>
+                    <h2 className='text-base font-medium text-white uppercase'>Quick Links</h2>
                     <ul className='mt-3 flex flex-col gap-1.5'>
                         <li><a href="/">Home</a></li>
                         <li><a href="/cars">Browse Cars</a></li>
@@ -37,7 +37,7 @@ const Footer = () => {
                 </div>
 
                 <div>
-                    <h2 className='text-base font-medium text-black uppercase'> Resources</h2>
+                    <h2 className='text-base font-medium text-white uppercase'> Resources</h2>
                     <ul className='mt-3 flex flex-col gap-1.5'>
                         <li><a href="#">Help Center</a></li>
                         <li><a href="#">Terms of Service</a></li>
@@ -47,11 +47,11 @@ const Footer = () => {
                 </div>
 
                  <div>
-                    <h2 className='text-base font-medium text-black uppercase'> Contact</h2>
+                    <h2 className='text-base font-medium text-white uppercase'> Contact</h2>
                     <ul className='mt-3 flex flex-col gap-1.5'>
                         <li>NIT Jamshedpur</li>
                         <li>Jamshedpur,India</li>
-                        <li>+919876543219</li>
+                        <li>+9198xxxxxx</li>
                         <li>info@urbanmiles.com</li>
                     </ul>
                 </div>

@@ -44,7 +44,7 @@ const Hero = () => {
         <img
           src={assets.heroBackground} 
           alt="Hero Background"
-          className="absolute  inset:0 w-full h-full object-cover z-0"
+          className="absolute  inset-0 w-full h-full object-cover z-0"
         />
 
         
@@ -94,7 +94,12 @@ const Hero = () => {
                 <label htmlFor="pickup-date" className="text-sm">Pick-up Date</label>
                 <input
                   value={pickupDate}
-                  onChange={(e) => setPickupDate(e.target.value)}
+                  onChange={(e) => {
+                    setPickupDate(e.target.value);
+                    if (returnDate && e.target.value > returnDate) {
+                      setReturnDate('');
+                    }
+                  }}
                   type="date"
                   id="pickup-date"
                   min={new Date().toISOString().split('T')[0]}

@@ -23,6 +23,11 @@ const CarDetails = () => {
         return
       }
 
+      if (!paymentOption) {
+        toast.error("Please select a payment option")
+        return
+      }
+
       if (!user) {
         toast.error("Please login to book a car")
         setShowLogin(true)

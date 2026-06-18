@@ -10,7 +10,6 @@ export const changeRoleOwner = async(req,res) =>{
       await User.findByIdAndUpdate(_id, {role: "owner"});
       res.json({ success : true, message:"Now you can list cars"})
     } catch(error){
-      console.log(error.message);
       res.json({success:false, message: error.message})  
     }
 }
@@ -43,7 +42,6 @@ export const addCar = async(req,res) =>{
         res.json({success: true, message:"Car added"});
 
     } catch(error){
-        console.log(error);
         res.json({success:false, message: error.message}) 
     }
 }
@@ -55,7 +53,6 @@ export const getOwnerCars = async(req,res) =>{
         res.json({success: true, cars});
 
     } catch(error){
-        console.log(error.message);
         res.json({ success: false, message: error.message})
     }
 }
@@ -76,7 +73,6 @@ export const toggleCarAvailability = async(req,res) =>{
         res.json({ success: true, message: "Availability Toggled"})
 
     } catch(error){
-        console.log(error.message);
         res.json({ success: false, message: error.message})
     }
 }
@@ -87,19 +83,20 @@ export const deleteCar = async(req,res) =>{
         const {carId} = req.body;
         const car = await Car.findById(carId)
 
-        if(car.owner.toString() != _id.toString()){
-            return res.json({success: false, message: "Unauthorized"});
+        if(!car){
+            return res.status(404).json({success: false, message: "Car not found"});
         }
 
-       car.owner = null;
-       car.isAvailable = false;
-       await car.save();
+        if(car.owner.toString() != _id.toString()){
+            return res.status(403).json({success: false, message: "Unauthorized"});
+        }
+
+        await Car.findByIdAndDelete(carId);
 
         res.json({ success: true, message: "Car Removed"});
 
     } catch(error){
-        console.log(error.message);
-        res.json({ success: false, message: error.message})
+        res.status(500).json({ success: false, message: error.message})
     }
 }
 
@@ -132,13 +129,11 @@ export const getDashboardData = async(req,res) =>{
     res.json({ success: true, dashboardData })
 
     } catch(error){
-        console.log(error.message);
         res.json({ success: false, message: error.message})
     }
 }
 
 export const updateUserImage = async(req,res) =>{
-    // console.log("inside update userImgae")
     try{
         const {_id} = req.user;
         const imageFile = req.file;
@@ -166,7 +161,6 @@ export const updateUserImage = async(req,res) =>{
 
 
     } catch(error){
-         console.log(error.message);
         res.json({ success: false, message: error.message})
     }
 }
